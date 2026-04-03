@@ -1,0 +1,14 @@
+torch
+torchvision
+torch-geometric
+scikit-learn
+scikit-image
+numpy
+pandas
+opencv-python
+fastapi
+uvicorn
+python-multipart
+streamlit
+Pillow
+matplotlib

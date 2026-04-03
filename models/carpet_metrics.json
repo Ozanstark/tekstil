@@ -1,0 +1,12 @@
+{
+  "category": "carpet",
+  "roc_auc": 0.6970304975922953,
+  "best_f1": 0.8585365853658536,
+  "threshold": 0.023407261818647385,
+  "normal_avg_score": 0.029634768875049695,
+  "defect_avg_score": 0.041050584547305376,
+  "num_train_images": 280,
+  "num_test_images": 117,
+  "num_patches_per_image": 1024,
+  "num_epochs": 20
+}
