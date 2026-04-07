@@ -166,16 +166,27 @@ def train_and_evaluate(root_dir, category, num_epochs=20, device='cpu'):
     best_f1 = 0.0
     auc = 0.0
     
+    # Normal skorların 95. yüzdelik dilimi: bu değerin altında kalan
+    # tüm normal görseller "sağlam" olarak kabul edilecek (false positive engelleme)
+    normal_scores = image_scores[y_true == 0]
+    normal_95_percentile = float(np.percentile(normal_scores, 95))
+    
     try:
         auc = roc_auc_score(y_true, image_scores)
         
-        thresholds = np.linspace(image_scores.min(), image_scores.max(), 200)
+        # Sadece normal 95. yüzdeliğin ÜZERİNDEKİ eşikleri değerlendir
+        thresholds = np.linspace(normal_95_percentile, image_scores.max(), 200)
         for thresh in thresholds:
             preds = (image_scores > thresh).astype(int)
             f1 = f1_score(y_true, preds, zero_division=0)
             if f1 > best_f1:
                 best_f1 = f1
                 best_threshold = float(thresh)
+        
+        # Eşik, normal ortalamanın altına düşmesin (ekstra güvenlik)
+        if best_threshold < normal_95_percentile:
+            best_threshold = normal_95_percentile
+            
     except ValueError as e:
         print(f"  Warning: {e}")
     
